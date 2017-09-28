@@ -2,7 +2,7 @@
 
 ## Motivation
 
-In this project we will use BGPStream to identify cases in which an entity has corrupted routing tables by advertising false routes. In this case, two or more autonomous systems would be announcing the same IP address as their own. We will look for cases where a longer prefix is announced by an AS that is in a different country and is registered with a different email domain. We can examine whois record for the ASes involved to spot differences and identify a hijack. In our paper we will also investigate and include ways to prevent such hijack. Our motivation is to understand weaknesses in the BGP interdomain routing and study possible solutions.
+In this project we will use BGPStream to identify cases in which an entity has corrupted routing tables by advertising false routes. In this case, two or more autonomous systems would be announcing the same IP address as their own. We will look for cases where a longer prefix is announced by an AS that is in a different country and is registered with a different email domain. We can examine whois record for the ASes involved to spot differences and identify a hijack. In our paper, we will also investigate and include ways to prevent such hijack. Our motivation is to understand weaknesses in the BGP interdomain routing and study possible solutions.
 
 ## Resources and Methodology
 
