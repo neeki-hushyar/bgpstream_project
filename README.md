@@ -9,7 +9,7 @@ In this project we will use BGPStream to identify cases in which an entity has c
 BGPStream contains measurement data from the Border Gateway Protocol (BGP). It provides an easy to use API for studying BGP. 
 * We will automate a python program which will analyze historical data in search of conflicts.
 * We will take into consideration, cases in which two autonomous systems advertise the same IP address and the ASes belong to the same organization. 
-* We will look at whois record for ASes with same prefix to spot hijacking. 
+* We will look at whois record for the ASes with same the prefix to spot hijacking. 
 * We will identify any disruptions caused by malicious or accidental conflicting network advertisements. 
 
 ## Timeline
