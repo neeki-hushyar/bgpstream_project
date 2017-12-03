@@ -62,12 +62,16 @@ while(stream.get_next_record(rec)):
 	            prefix_address, network_mask= elem.fields['prefix'].split('/')
 
 	            if  (prefix_address in record_prefix_and_origin_ASes) and (record_prefix_and_origin_ASes[prefix_address][-1][0] == path_list[-1]):
-	                record_prefix_and_origin_ASes[prefix_address][-1]= [path_list[-1],record_prefix_and_origin_ASes[prefix_address][-1][1]+1,network_mask]
+
+	            	if rec.collector not in record_prefix_and_origin_ASes[prefix_address][-1][3] :
+	            		record_prefix_and_origin_ASes[prefix_address][-1][3].append(rec.collector)
+
+	                record_prefix_and_origin_ASes[prefix_address][-1][1] += 1 # {prefix: [origin_AS,consecutive_count,prefixlen, [collector]}
 	            else :
-	                record_prefix_and_origin_ASes[prefix_address].append([path_list[-1],1,network_mask])
+	                record_prefix_and_origin_ASes[prefix_address].append([path_list[-1],1,network_mask,[rec.collector]])
 
             elem = rec.get_next_elem()
 
 # filter prefixes from the dictionary that have more than 1 Origin Ases
-record_prefix_and_origin_ASes_suspec = {k: v for k, v in record_prefix_and_origin_ASes.items() if len(v) > 1}
+record_prefix_and_origin_ASes_suspect = {k: v for k, v in record_prefix_and_origin_ASes.items() if len(v) > 1}
 pdb.set_trace()
