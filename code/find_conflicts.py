@@ -100,32 +100,79 @@ for each_file in files:
         graph[as1].add(as2)
         graph[as2].add(as1)
 
-def check_asn_owner(origins):
+def check_asn_owner(origins, prefix):
     # returns 0 if prefixes are questionable
-    try:
-        minority_owner = min(origins.items(), key=lambda x: x[1])[0]
-        majority_owner = max(origins.items(), key=lambda x: x[1])[0]
-        minority_owner_cc = id_to_country[asn_to_id[minority_owner]]
-        majority_owner_cc = id_to_country[asn_to_id[majority_owner]]
-        minority_owner_org = id_to_org[asn_to_id[minority_owner]]
-        majority_owner_org = id_to_org[asn_to_id[majority_owner]]
-    except KeyError:
-        print ("SOME AS DOES NOT EXIST")
+    ccs, orgs = set(), set()
+    cc_to_count = dict()
+    for asn in origins.keys():
+        try:
+            asn_id = asn_to_id[asn]
+            cc = id_to_country[asn_id]
+            org = id_to_org[asn_id]
+            cc_to_count[cc] = origins[asn]
+            ccs.add(cc)
+            orgs.add(org)
+        except KeyError: # asn DNE
+            del origins[asn]
+            continue
+    if len(ccs) == 0 or len(orgs) == 0:
+        print "No info for origins: {0}".format(origins.keys())
         return 1
-    if minority_owner_cc != majority_owner_cc and minority_owner_cc != "US":
-        if minority_owner_org == majority_owner_org:
-            print "\nASes are part of CDN"
-            print "Countries involved include: {0} and {1}".format(majority_owner_cc, minority_owner_cc)
-            for k, v in origins.items():
-                print k, v
+    if len(ccs) == 1: # all from same country
         return 1
-    if minority_owner_cc != majority_owner_cc and minority_owner_cc != "US":
-        if majority_owner not in graph[minority_owner]:
-            print "\nASes are not peers"
-            print "AS {0} is owned by {1}".format(minority_owner, minority_owner_cc)
-            print "AS {0} is owned by {1}".format(majority_owner, majority_owner_cc)
-            return 0
-    return 1
+    if len(orgs) == 1: # asns coming from different countries and different orgs
+        print "\nASes may be part of CDN"
+        return 1
+
+    prefix_country = None
+    content = os.popen('whois {0}'.format(prefix)).read().split("\n")
+    for i in content:
+        if i.startswith("country"):
+            prefix_country = i.split(":")[1].strip()
+
+
+    flag = 1
+    max_asn = max(origins, key=origins.get)
+    # only important than non-majority announcing countries are the same as the country in
+    # which the prefix is owned
+    if prefix_country is not None:
+        for asn in origins.keys():
+            if max_asn == asn:
+                # small countries may use ASes larger coutnreis to make most of their annoucnements
+                continue # doesn't matter the country which announces the most 
+            asn_id = asn_to_id[asn]
+            cc = id_to_country[asn_id]
+            if prefix_country == cc:
+                continue
+            flag = 0
+    if flag:
+        return 1 # confirmed that lesser annoucnements are coming from the country owning the prefix
+    
+        
+    flag = 1
+    for asn1 in origins.keys():
+        for asn2 in origins.keys():
+            if asn1 == asn2:
+                continue
+
+            try:
+                if asn1 not in graph[asn2]:
+                    asn_id1 = asn_to_id[asn1]
+                    cc1 = id_to_country[asn_id1]
+                    asn_id2 = asn_to_id[asn2]
+                    cc2 = id_to_country[asn_id2]
+                    if cc1 == cc2: # same country - allow announcements ?
+                        continue
+                    flag = 0 # otherwise conflicting annoucnements are bad
+                    if prefix_country is not None:
+                        print "Prefix owned by: {0}".format(prefix_country)
+                    print "{0}-{1} and {2}-{3} announced similar prefixes but are not peers/from same country".format(asn1, cc1,  asn2, cc2)
+
+            except KeyError:
+                continue
+    return flag
+        
+
 
         
 
@@ -134,10 +181,12 @@ def identify_overlapping_prefixes(d, path_dict):
     # check the origins of the difference prefix lengths
     overlap = defaultdict(list)
     for k, _ in d.items():
-        first_16 = ".".join(k.split(".")[:2])
-        overlap[first_16].append(k)
-
+        first_24 = ".".join(k.split(".")[:3])
+        overlap[first_24].append(k)
+        
+    ctr = 0
     for k, v in overlap.items():
+        prefix = k + '.0'
         if len(v) > 1:
             origins = defaultdict(int)
             for prefix in v:
@@ -145,11 +194,15 @@ def identify_overlapping_prefixes(d, path_dict):
                 for path in paths:
                     origins[path.strip().split(" ")[-1]] += 1
             if len(origins.items()) > 1:
-                    valid = check_asn_owner(origins)
+                    valid = check_asn_owner(origins, prefix)
                     if not valid:
-                        print "Multiple origin ASes for similar prefixes: {0}".format(v)
+                        ctr += 1
+                        print "Prefixes: ", list(v)
                         for origin, count in origins.items():
                             print "AS - {0} has {1} listings".format(origin, count)
+                        print "\n\n"
+    print "Total prefixes checked: {0}".format(len(overlap.items()))
+    print "Prefixes flagged: {0}".format(ctr)
         
 
 
@@ -189,11 +242,7 @@ def find_inconsistencies(path_dict):
             for k, v in conflicts.items():
                 print "Origin {0} exists as non-origin in {1}".format(k, v)
             ctr += 1
-        #if ctr == 3:
-            #sys.exit()
-        #if len(v) > 1:
-            #print "{0}: {1}".format(k, list(v))
-            #print "Prefix: {0}, Different Paths: {1}".format(k, v)
+
 
 def main():
     '''
@@ -211,17 +260,15 @@ def main():
     path_dict = defaultdict(set)
     for m in [1]:
     #for m in ['01', '02', '03', '04', '04', '05', '06', '07', '08', '09', '10', '11', '12']:
-        for t in [1]:
-        #for t in ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']:
-            #t1 = datetime.strptime("2008-02-24 {0}:45:30 UTC".format(t), "%Y-%m-%d %H:%M:%S %Z")
-            t1 = datetime.strptime("2008-02-24 00:00:01 UTC", "%Y-%m-%d %H:%M:%S %Z")
+        for day in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30']:
+
+            t1 = datetime.strptime("2017-04-{0} 00:00:01 UTC".format(day), "%Y-%m-%d %H:%M:%S %Z")
             t1 = int(time.mktime(t1.timetuple()))
-            #t2 = datetime.strptime("2015-{0}-01 {1}:04:30".format(m, t), "%Y-%m-%d %H:%M:%S")
-            t2 = datetime.strptime("2008-02-24 14:59:59 UTC", "%Y-%m-%d %H:%M:%S %Z")
+
+            t2 = datetime.strptime("2017-04-{0} 0:59:59 UTC".format(day), "%Y-%m-%d %H:%M:%S %Z")
             t2 = int(time.mktime(t2.timetuple()))
 
             stream.add_filter("record-type", "ribs")
-            #stream.add_interval_filter(1203878700,1203884400)
             stream.add_interval_filter(t1, t2)
             stream.start()
 
