@@ -1,1 +1,3 @@
  \section{Motivation}\label{sec:motivation}
+ 
+Standard BGP is an inherently insecure protocol. Origin authentication and path validation protocols are not widely used. This allows for false announcements which can have a wide range of impacts. Attackers can use this to intercept traffic for the purposes of sniffing or redirection. In accidental cases, this can lead to performance degradation or denial of service when a user directs traffic down an incorrect path. Identifying conflicts and the sources of the conflicts is the first step in deciding what conflict detection and prevention mechanisms are most urgently needed.
