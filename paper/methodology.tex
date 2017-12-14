@@ -10,7 +10,11 @@ Identifying BGP hijacks involved a carefully filtering RIB table records.
 \item If we find that the two ASes do not have either peer-peer or customer-provider relation, we then check the geolocation of the two ASes. We make use of the whois record again to compare the geolocation. If the geolocation do not match, then we say we have identified a hijack. 
 \item We use bgpstream twitter feed as the `ground truth'. 
 \end{enumerate}
-
+ \begin{figure}[!htbp]
+	\includegraphics[width=0.5\textwidth]{Algorithm_flowchart.png}
+	\caption{Flowchart presets our algorithm that characterizes different types of AS-Origin conflicts.}
+	\label{a:label}
+\end{figure}
 \subsection{Hijack Characterization }
 
 Based on the sociopolitical context and other information we have [...what other infor? ], we manually classify into three categories (1)Misconfiguration, (2)Political hijack for Censorship and (3)Malicious non-political hijack. 
