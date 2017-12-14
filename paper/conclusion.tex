@@ -1,1 +1,7 @@
 \section{Conclusion}
+
+Using BGPStream data, we searched for conflicting announcements. We successfully identified several BGP hijacks and accidental misconfigurations. Further, we utilized CAIDA AS information to identify and filter out CDNs, international organizations and conflicts due to peering relationships from the conflicts we detected.
+
+We note that our ability to label accidental misconfigurations is only as strong as the accuracy of the CAIDA relationships and AS data. We collect  our BGP announcements from BGPStream which allows us to gather data from various collectors including Route Views, RIPE and OpenBMP. While we have a full view of the prefixes announced by these collectors, we miss malicious activity by ASes not tracked by these collectors, or only partially tracked by these collectors. In addition, because of the changing internet topology, the CAIDA relationships and map dataset is always changing. This makes analyzing historical dataset on with a single threaded program on single computer hard. 
+
+Future studies include following misconfigurations over time and correlating the results to the similar data from known hijacks. This would allow us to identify several hijacks that we currently classified as misconfigurations.
