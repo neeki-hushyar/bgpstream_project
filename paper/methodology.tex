@@ -8,7 +8,7 @@ Figure~\ref{fig:flowchart} presents a high level flowchart of our algorithm.
 	\label{fig:flowchart}
 \end{figure}
 
-\subsection{Algorithm for Identifying Source of Conflict}
+\subsection{Algorithm for Identifying Source of Conflicts}
 Identifying the reason of origin AS conflicts involves carefully filtering RIB table records. Here, we describe our method of filtering possibly non-malicious conflicts. 
 \begin{enumerate}
 \item The first step is identifying the instances where we saw two different ASes announcing the same BGP prefix/es. We took the data set we got from BGPStream and identified all instances where a prefix or a more-specific prefix than previously found was being announced by different origin ASes. 
@@ -21,6 +21,8 @@ Identifying the reason of origin AS conflicts involves carefully filtering RIB t
 \end{enumerate}
 \subsection{Algorithm Validation}
 To check the validity of our algorithm, we verified that given the appropriate date range, our algorithm correctly identifies historical hijacks. We checked for 2008's hijack by Pakistan Telecom, 2010's hijack by China Telecom and 2014's hijack by IndoNet. 
+\subsection{Types of origin AS conflicts}
+After labeling the incidents of multiple AS origins announcing the same prefix with labels described in our algorithm, we calculated the number of occurrences for each labels. This helped us understand the common reasons for AS origin conflicts. It should be noted that the labels such as `cdn' and `same organization' might be overlapping in reality. However, in our filtering algorithm, we are filtering out AS origins in each step which means the number of `same organization' incidents we get is exclusive of the ones that involve cdns. Same idea applies to other categories as well.
 \subsection{Hijack Duration}
 After identifying the hijack or misconfigurations events, we study the duration of hijack. Our estimation is only as correct frequency of RIB and update dumps to the BGP monitors. To get the estimate of the duration of the hijack, we calculate the difference between the time stamps of when the anomalous announcement was first recorded and when when the announcement was restored to the original announcement. It should be noted that this is only a rough estimation of the duration. 
 \subsection{Location}

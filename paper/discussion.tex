@@ -1,5 +1,15 @@
- \section{Prevention}\label{sec:prevention}
- 
+ \section{Discussion}\label{sec:discussion}
+\subsection{Algorithm Validation}
+To check the validity of our algorithm, we verified that given the appropriate date range, our algorithm correctly identifies historical hijacks. We checked for 2008's hijack by Pakistan Telecom, 2010's hijack by China Telecom and 2014's hijack by IndoNet. 
+\subsection{Types of origin AS conflicts}
+After labeling the incidents of multiple AS origins announcing the same prefix with labels described in our algorithm, we calculated the number of occurrences for each labels. This helped us understand the common reasons for AS origin conflicts. It should be noted that the labels such as `cdn' and `same organization' might be overlapping in reality. However, in our filtering algorithm, we are filtering out AS origins in each step which means the number of `same organization' incidents we get is exclusive of the ones that involve cdns. Same idea applies to other categories as well.
+\subsection{Hijack Duration}
+After identifying the hijack or misconfigurations events, we study the duration of hijack. Our estimation is only as correct frequency of RIB and update dumps to the BGP monitors. To get the estimate of the duration of the hijack, we calculate the difference between the time stamps of when the anomalous announcement was first recorded and when when the announcement was restored to the original announcement. It should be noted that this is only a rough estimation of the duration. 
+\subsection{Location}
+As per the availability of location information in the CAIDA datsets, we studied the most common country-level locations for hijacks. 
+\subsection{Common destinations and attackers}
+We also manually studied the most common attack destinations and the attackers in terms of the tiers they belong to. 
+ \subsection{Prevention}
  There are several suggested methods for BGP hijacking prevention. The simplest prevention method would be to only allow updates from the autonomous system which previously announced the path for a specific entity. This, however may negatively affect the availability and reachability of the end system. A compromise which increases the security of the update while maintaining availability, would be to delay the adoption of an update which originates from an unexpected AS. In order for this method to be implemented, the AS and AS-level edges which normally announce each BGP path, or blocks of paths, may need to be white listed in some sense. BGP updates would have to be monitored and processed. This mechanism allows time for an accidental update be removed before having widespread, if any affect. 
  
 An inactive implementation of such system, is the Inernet Alert Registry (IAR). The IAR  maintained routing security information based on route history. Route history determined BGP prefix ownership and an alert was raised if an update pointed back to a different prefix. A danger of this implementation is that a trusted AS-level edge for a given prefix will not be flagged in the case it makes a false announcement. Further, in the case of the Pakistan hijack, the falsely announced route would not have been flagged as the specific prefix announced would have still been in the valid prefix space. The following mechanism would catch the previously mentioned updates which would avoid detection by the IAR.
