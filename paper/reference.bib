@@ -27,3 +27,49 @@
 	month = aug,
 	year = {2015}
 }
+
+@phdthesis{alshamrani_detecting_2017,
+	type = {Thesis},
+	title = {Detecting {IP} prefix hijack events using {BGP} activity and {AS} connectivity analysis},
+	copyright = {http://creativecommons.org/licenses/by-sa/3.0/us/},
+	url = {https://pearl.plymouth.ac.uk/handle/10026.1/9566},
+	abstract = {The Border Gateway Protocol (BGP), the main component of core Internet connectivity, suffers vulnerability issues related to the impersonation of the ownership of IP prefixes for Autonomous Systems (ASes). In this context, a number of studies have focused on securing the BGP through several techniques, such as monitoring-based, historical-based and statistical-based behavioural models. In spite of the significant research undertaken, the proposed solutions cannot detect the IP prefix hijack accurately or even differentiate it from other types of attacks that could threaten the performance of the BGP. This research proposes three novel detection methods aimed at tracking the behaviour of BGP edge routers and detecting IP prefix hijacks based on statistical analysis of variance, the attack signature approach and a classification-based technique.  
+The first detection method uses statistical analysis of variance to identify hijacking behaviour through the normal operation of routing information being exchanged among routers and their behaviour during the occurrence of IP prefix hijacking. However, this method failed to find any indication of IP prefix hijacking because of the difficulty of having raw BGP data hijacking-free. 
+The research also proposes another detection method that parses BGP advertisements (announcements) and checks whether IP prefixes are announced or advertised by more than one AS.  If so, events are selected for further validation using Regional Internet Registry (RIR) databases to determine whether the ASes announcing the prefixes are owned by the same organisation or different organisations. Advertisements for the same IP prefix made by ASes owned by different organisations are subsequently identified as hijacking events. The proposed algorithm of the detection method was validated using the 2008 YouTube Pakistan hijack event; the analysis demonstrates that the algorithm qualitatively increases the accuracy of detecting IP prefix hijacks. The algorithm is very accurate as long as the RIRs (Regional Internet Registries) are updated concurrently with hijacking detection. The detection method and can be integrated and work with BGP routers separately. 
+Another detection method is proposed to detect IP prefix hijacking using a combination of signature-based (parsing-based) and classification-based techniques. The parsing technique is used as a pre-processing phase before the classification-based method. Some features are extracted based on the connectivity behaviour of the suspicious ASes given by the parsing technique. In other words, this detection method tracks the behaviour of the suspicious ASes and follows up with an analysis of their interaction with directly and indirectly connected neighbours based on a set of features extracted from the ASPATH information about the suspicious ASes. Before sending the extracted feature values to the best five classifiers that can work with the specifications of an implemented classification dataset, the detection method computes the similarity between benign and malicious behaviours to determine to what extent the classifiers can distinguish suspicious behaviour from benign behaviour and then detect the hijacking. Evaluation tests of the proposed algorithm demonstrated that the detection method was able to detect the hijacks with 96\% accuracy and can be integrated and work with BGP routers separately.},
+	language = {en},
+	urldate = {2017-12-12},
+	school = {University of Plymouth},
+	author = {Alshamrani, Hussain Hameed},
+	year = {2017}
+}
+@inproceedings{florio_bypassing_2014,
+	title = {Bypassing {Censorship}: {A} {Proven} {Tool} against the {Recent} {Internet} {Censorship} in {Turkey}},
+	shorttitle = {Bypassing {Censorship}},
+	doi = {10.1109/ISSREW.2014.93},
+	abstract = {Users of mobile devices are experiencing great difficulties to circumvent Internet censorship technologies that violate human rights. Mobile users do not have full control of their own systems, and in many cases, they cannot even change the configuration imposed by their 3G/4G providers. Such limitations allow the provider acting under the government authority to enforce specific Internet filtering mechanisms, and to prevent access to censored material. In this paper, we survey the events related to the Internet censorship happened in Turkey during the first months of 2014 and we introduce DNSet, an Android app that has been used by Turkish citizens to successfully circumvent the Internet censorship. In particular, DNSet allows mobile users to easily change the DNS server imposed by their 3G/4G providers, without the mobile users have administrative rights on the device (i.e. Without rooting the device). We report on data and information that has been anonymously collected through the DNSet application. Furthermore, we raise up the suspicion that a few censorship activities in Turkey began at least a month before the official ban on Twitter.},
+	booktitle = {2014 {IEEE} {International} {Symposium} on {Software} {Reliability} {Engineering} {Workshops}},
+	author = {Florio, A. D. and Verde, N. V. and Villani, A. and Vitali, D. and Mancini, L. V.},
+	month = nov,
+	year = {2014},
+	keywords = {3G mobile communication, 3G/4G provider, 4G mobile communication, Android (operating system), Android app, Androids, Censorship, DNS, DNS server, DNSet, Humanoid robots, IP networks, Internet, Internet censorship technology, Internet filtering mechanism, Servers, Turkey, Turkish citizens, Twitter, administrative rights, android, bypassing censorship, censored material, censorship, censorship activity, government authority, government policies, human rights, information filters, mobile, mobile computing, mobile devices, mobile users, security, security of data, social networking (online)},
+	pages = {389--394}
+}
+
+@inproceedings{Ramachandran:2006:UNB:1159913.1159947,
+ author = {Ramachandran, Anirudh and Feamster, Nick},
+ title = {Understanding the Network-level Behavior of Spammers},
+ booktitle = {Proceedings of the 2006 Conference on Applications, Technologies, Architectures, and Protocols for Computer Communications},
+ series = {SIGCOMM '06},
+ year = {2006},
+ isbn = {1-59593-308-5},
+ location = {Pisa, Italy},
+ pages = {291--302},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1159913.1159947},
+ doi = {10.1145/1159913.1159947},
+ acmid = {1159947},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {BGP, botnet, network management, security, spam},
+} 
