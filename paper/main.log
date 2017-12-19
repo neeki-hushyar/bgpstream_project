@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  8 NOV 2017 18:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  18 DEC 2017 23:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -452,7 +452,16 @@ LaTeX Font Info:    Try loading font information for TS1+ptm on input line 85.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) (./abstract.tex) Excluding 'CCSXML' comment. (./introduction.tex
+) (./abstract.tex)
+Overfull \hbox (2.46841pt too wide) in paragraph at lines 2--87
+\T1/aer/m/n/9 on CDN, peer-ing re-la-tion-ships, AS or-ga-ni-za-tion names, cou
+n-
+ []
+
+Excluding 'CCSXML' comment. (./introduction.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 <Interior_and_BGP_routers.png, id=1, 884.30376pt x 507.8975pt>
 File: Interior_and_BGP_routers.png Graphic file (type png)
 
@@ -464,39 +473,91 @@ Overfull \hbox (12.0pt too wide) in paragraph at lines 5--6
 [][] 
  []
 
-) (./motivation.tex) (./methodology.tex [1{/usr/local/texlive/2016/texmf-var/fo
-nts/map/pdftex/updmap/pdftex.map}
+[1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
- <./Interior_and_BGP_routers.png>]
+ <./Interior_and_BGP_routers.png>]) (./motivation.tex) (./relatedwork.tex)
+(./methodology.tex <flow.png, id=16, 894.34125pt x 612.2875pt>
+File: flow.png Graphic file (type png)
+ <use flow.png>
+Package pdftex.def Info: flow.png used on input line 6.
+(pdftex.def)             Requested size: 252.0pt x 172.52309pt.
 
-LaTeX Warning: Citation `opendns_blackhat_2015' on page \thepage  undefined on 
-input line 9.
+Overfull \hbox (12.0pt too wide) in paragraph at lines 6--7
+[][] 
+ []
 
-) (./results.tex) (./discussion.tex) (./conclusion.tex) (./main.bbl) [2]
-(./main.aux) ) 
+
+Overfull \hbox (4.12958pt too wide) in paragraph at lines 2--10
+\T1/aer/m/n/9 the widespread use of CDN, multi-na-tional or-ga-ni-za-tions make
+
+ []
+
+[2]
+Overfull \hbox (5.8127pt too wide) in paragraph at lines 29--30
+[]\T1/aer/m/n/9 As per the avail-abil-ity of lo-ca-tion in-for-ma-tion in the C
+AIDA
+ []
+
+) (./results.tex <AS_Origin_Conflict_Types.png, id=20, 462.528pt x 346.896pt>
+File: AS_Origin_Conflict_Types.png Graphic file (type png)
+
+<use AS_Origin_Conflict_Types.png>
+Package pdftex.def Info: AS_Origin_Conflict_Types.png used on input line 7.
+(pdftex.def)             Requested size: 252.0pt x 189.00427pt.
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 7--8
+[][] 
+ []
+
+[3 <./flow.png>] <Occurences_by_country_2.png, id=25, 462.528pt x 346.896pt>
+File: Occurences_by_country_2.png Graphic file (type png)
+
+<use Occurences_by_country_2.png>
+Package pdftex.def Info: Occurences_by_country_2.png used on input line 16.
+(pdftex.def)             Requested size: 252.0pt x 189.00427pt.
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 16--17
+[][] 
+ []
+
+) (./discussion.tex [4 <./AS_Origin_Conflict_Types.png> <./Occurences_by_countr
+y_2.png>]) (./conclusion.tex) [5] (./main.bbl
+! Misplaced alignment tab character &.
+l.61   {Cybersecurity} {Applications} &
+                                        {Technology}, 2009.
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+) [6
+
+] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 4915 strings out of 493014
- 70747 string characters out of 6133351
- 141121 words of memory out of 5000000
- 8313 multiletter control sequences out of 15000+600000
- 55286 words of font info for 78 fonts, out of 8000000 for 9000
+ 4941 strings out of 493014
+ 71370 string characters out of 6133351
+ 144197 words of memory out of 5000000
+ 8339 multiletter control sequences out of 15000+600000
+ 52138 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,10n,96p,681b,486s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}<
-/usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></u
-sr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
-local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/loc
-al/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local
-/texlive/2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
-e/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2016/
-texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist
-/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/typ
-e1/urw/times/utmri8a.pfb>
-Output written on main.pdf (2 pages, 452227 bytes).
+ 61i,10n,96p,1145b,486s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc
+}</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></
+usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr
+/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/l
+ocal/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/loc
+al/texlive/2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texl
+ive/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/201
+6/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-di
+st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/t
+ype1/urw/times/utmri8a.pfb>
+Output written on main.pdf (6 pages, 820445 bytes).
 PDF statistics:
- 51 PDF objects out of 1000 (max. 8388607)
- 35 compressed objects within 1 object stream
+ 69 PDF objects out of 1000 (max. 8388607)
+ 43 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

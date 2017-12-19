@@ -1,4 +1,38 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{noauthor_bgp_nodate}
+{BGP} in 2016 {\textbar} blabs.apnic.net.
+
+\bibitem{relation}
+{CAIDA} {UCSD} {AS} {Relationships}.
+\newblock Jan. 2004.
+
+\bibitem{mapping}
+{CAIDA} {UCSD} {AS} to {Organization} {Mapping}.
+\newblock Aug. 2014.
+
+\bibitem{alshamrani_detecting_2017}
+H.~H. Alshamrani.
+\newblock {\em Detecting {IP} prefix hijack events using {BGP} activity and
+  {AS} connectivity analysis}.
+\newblock Thesis, University of Plymouth, 2017.
+
+\bibitem{florio_bypassing_2014}
+A.~D. Florio, N.~V. Verde, A.~Villani, D.~Vitali, and L.~V. Mancini.
+\newblock Bypassing {Censorship}: {A} {Proven} {Tool} against the {Recent}
+  {Internet} {Censorship} in {Turkey}.
+\newblock In {\em 2014 {IEEE} {International} {Symposium} on {Software}
+  {Reliability} {Engineering} {Workshops}}, pages 389--394, Nov. 2014.
+
+\bibitem{euro}
+Q.~Jacquemart, G.~Urvoy-Keller, and E.~Biersack.
+\newblock {A} {Longitudinal} {Study} of {BGP} {MOAS} {Prefixes}.
+\newblock Eurocom '14, 2014.
+
+\bibitem{opendns_blackhat_2015}
+{OpenDNS}.
+\newblock Blackhat {USA} 2015: {BGP} {Stream} {Presentation}.
+\newblock Aug. 2015.
 
 \bibitem{orsini_bgpstream:_2016}
 C.~Orsini, A.~King, D.~Giordano, V.~Giotsas, and A.~Dainotti.
@@ -6,5 +40,30 @@ C.~Orsini, A.~King, D.~Giordano, V.~Giotsas, and A.~Dainotti.
   {BGP} {Data} {Analysis}.
 \newblock In {\em Proceedings of the 2016 {Internet} {Measurement}
   {Conference}}, {IMC} '16, pages 429--444, New York, NY, USA, 2016. ACM.
+
+\bibitem{Ramachandran:2006:UNB:1159913.1159947}
+A.~Ramachandran and N.~Feamster.
+\newblock Understanding the network-level behavior of spammers.
+\newblock In {\em Proceedings of the 2006 Conference on Applications,
+  Technologies, Architectures, and Protocols for Computer Communications},
+  SIGCOMM '06, pages 291--302, New York, NY, USA, 2006. ACM.
+
+\bibitem{artemis}
+P.~Sermpezis, V.~Kotronis, P.~Gigis, X.~Dimitropoulos, J.~H. Park, D.~Cicalese,
+  A.~King, and A.~Dainotti.
+\newblock {ARTEMIS:} {Neutralizing} {BGP} {Hijacking} within a {Minute}.
+\newblock {SIGCOMM}, 2017.
+
+\bibitem{bgpmon}
+H.~Yan, R.~Oliveira, K.~Burnette, D.~Matthews, L.~Zhang, and D.~Massey.
+\newblock {BGPmon:} a real-time, scalable, extensible monitoring system.
+\newblock {Conference} {For} {Homeland} {Security}, 2009. {CATCH} '09.
+  {Cybersecurity} {Applications} & {Technology}, 2009.
+
+\bibitem{colorado}
+X.~Zhao, D.~Pei, Wang, D.~Massey, A.~Mankin, F.~Wu, and L.~Zhang.
+\newblock {An} {Analysis} of {BGP} {Multiple} {Origin} {AS} {(MOAS)}
+  {Conflicts}.
+\newblock Colorado State University, 2001.
 
 \end{thebibliography}

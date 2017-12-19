@@ -3,44 +3,61 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main.aux
 The style file: abbrv.bst
 Database file #1: reference.bib
-You've used 1 entry,
+Name 3 in "Zhao, Xiaoliang and Pei, Dan and Wang, and Massey, Dan and Mankin, Allison and Wu, Felix and Zhang, Lixia" has a comma at the end for entry colorado
+while executing---line 1049 of file abbrv.bst
+Warning--to sort, need author or key in noauthor_bgp_nodate
+Warning--to sort, need author or key in mapping
+Warning--to sort, need author or key in relation
+Warning--empty author in relation
+Warning--empty booktitle in relation
+Warning--empty author in mapping
+Warning--empty booktitle in mapping
+Warning--empty booktitle in euro
+Warning--empty booktitle in opendns_blackhat_2015
+Warning--empty booktitle in artemis
+Warning--empty booktitle in bgpmon
+Name 3 in "Zhao, Xiaoliang and Pei, Dan and Wang, and Massey, Dan and Mankin, Allison and Wu, Felix and Zhang, Lixia" has a comma at the end for entry colorado
+while executing---line 1090 of file abbrv.bst
+Warning--empty booktitle in colorado
+You've used 12 entries,
             2118 wiz_defined-function locations,
-            506 strings with 4020 characters,
-and the built_in function-call counts, 581 in all, are:
-= -- 60
-> -- 28
-< -- 1
-+ -- 11
-- -- 10
-* -- 42
-:= -- 93
-add.period$ -- 4
-call.type$ -- 1
-change.case$ -- 8
+            556 strings with 5933 characters,
+and the built_in function-call counts, 4129 in all, are:
+= -- 377
+> -- 218
+< -- 3
++ -- 88
+- -- 76
+* -- 278
+:= -- 650
+add.period$ -- 34
+call.type$ -- 12
+change.case$ -- 74
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 23
-empty$ -- 40
-format.name$ -- 10
-if$ -- 127
+cite$ -- 24
+duplicate$ -- 176
+empty$ -- 341
+format.name$ -- 76
+if$ -- 883
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 8
-num.names$ -- 2
-pop$ -- 8
+int.to.str$ -- 12
+missing$ -- 10
+newline$ -- 59
+num.names$ -- 18
+pop$ -- 115
 preamble$ -- 1
-purify$ -- 7
+purify$ -- 62
 quote$ -- 0
-skip$ -- 19
+skip$ -- 122
 stack$ -- 0
-substring$ -- 37
-swap$ -- 10
-text.length$ -- 1
+substring$ -- 156
+swap$ -- 40
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
-warning$ -- 0
-while$ -- 5
-width$ -- 2
-write$ -- 16
+type$ -- 48
+warning$ -- 12
+while$ -- 27
+width$ -- 14
+write$ -- 120
+(There were 2 error messages)

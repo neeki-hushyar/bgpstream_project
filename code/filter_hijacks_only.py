@@ -4,9 +4,14 @@ from _pybgpstream import BGPStream, BGPRecord, BGPElem
 from combine_id_asn import combine_id_asn
 from collections import defaultdict
 from get_peering_relations import get_peering_relations
+from functools import reduce
+import collections
+
+import matplotlib.pyplot as plt;
 import numpy as np
-import matplotlib.pyplot as plt
+
 cdn_list = ['maxcdn','cloudfare','incapsula','edgecast','cachefly','amazon','cdn77','google','akamai','cdnetworks','limelight']
+#cdn_list = ['maxcdn','cloudfare','incapsula','edgecast','cachefly','amazon','cdn77','akamai','cdnetworks','limelight']
 asn_to_org_map = combine_id_asn()
 peering_relations = get_peering_relations()
 
@@ -18,8 +23,8 @@ def get_duplicate_origins():
     # Consider Singapore route view collector 
     stream.add_filter('collector','rrc10') #Italy Milan 
     # stream.add_filter('collector','rrc00')# in Amsterdam
-    # stream.add_filter('collector','rrc00')# in Japan
-    # stream.add_filter('collector','rrc06')# in SanJose
+    #stream.add_filter('collector','rrc00')# in Japan
+    #stream.add_filter('collector','rrc06')# in SanJose
     # stream.add_filter('collector','route-views.kixp')#Nairobi Kenya
     # stream.add_filter('collector','route-views.sydney')# Sydney Australia
     # stream.add_filter('collector','route-views.saopaulo')# SaoPaulo
@@ -42,10 +47,12 @@ def get_duplicate_origins():
     # April 1, 2017  hour every day 
     start_apl = 1491004800
     #end_apl = 1491008400
-    for time in range(1,7):
-        stream.add_interval_filter(start_apl,start_apl+3600)
-        start_apl += 86400
-
+    # for time in range(1,7):
+    # 	#print(start_apl)
+    #     stream.add_interval_filter(start_apl,start_apl+3600)
+    #     start_apl += 86400
+    #1491609600
+    stream.add_interval_filter(start_apl,start_apl+ (3600*9))
     stream.start()
 
     # multiple ASes announcing a prefix a prefix
@@ -55,7 +62,7 @@ def get_duplicate_origins():
     while(stream.get_next_record(rec)):
         # Print the record information only if it is not a valid record
         if rec.status != "valid":
-            print rec.project, rec.collector, rec.type, rec.time, rec.status
+            print (rec.project, rec.collector, rec.type, rec.time, rec.status)
         else:
             elem = rec.get_next_elem()
             while(elem):
@@ -76,88 +83,144 @@ def get_duplicate_origins():
                         if rec.collector not in record_prefix_and_origin_ASes[prefix_address][-1][3] :
                             record_prefix_and_origin_ASes[prefix_address][-1][3].append(rec.collector)
 
-                            if len (record_prefix_and_origin_ASes[prefix_address][-1][4]) < 2:
-                                record_prefix_and_origin_ASes[prefix_address][-1][4].append(rec.time)
-                            elif record_prefix_and_origin_ASes[prefix_address][-1][4][1] < rec.time:
-                                record_prefix_and_origin_ASes[prefix_address][-1][4][1] = rec.time
+                        if len (record_prefix_and_origin_ASes[prefix_address][-1][4]) < 2:
+                            record_prefix_and_origin_ASes[prefix_address][-1][4].append(rec.time)
+                        elif record_prefix_and_origin_ASes[prefix_address][-1][4][1] < rec.time:
+                            record_prefix_and_origin_ASes[prefix_address][-1][4][1] = rec.time
 
                         record_prefix_and_origin_ASes[prefix_address][-1][1] += 1 # {prefix: [origin_AS,consecutive_count,prefixlen, [collector],time]}
+                    #elif (prefix_address in record_prefix_and_origin_ASes):
+
                     else :
-                        record_prefix_and_origin_ASes[prefix_address].append([path_list[-1],1,network_mask,[rec.collector], [rec.time]])
+                        # path can be a set or a sequence
+                        origin_AS = path_list[-1]
+
+                        if origin_AS != '' and isinstance(eval(origin_AS), (list, tuple, set )):
+                            origin_AS = list(eval(origin_AS))[-1]
+                            #print (origin_AS)
+                        record_prefix_and_origin_ASes[prefix_address].append([origin_AS,1,network_mask,[rec.collector], [rec.time]])
 
                 elem = rec.get_next_elem()
 
-    #pdb.set_trace()
+    
     # filter prefixes from the dictionary that have more than 1 Origin Ases
     record_prefix_and_origin_ASes_suspect = {k: v for k, v in record_prefix_and_origin_ASes.items() if len(v) > 1}
-
     check_if_same_organization(record_prefix_and_origin_ASes_suspect)
 
 def check_if_same_organization(record_prefix_and_origin_ASes_suspect):
     prefix_country_org= dict()
-    duplicate_type_count= {'same_org':[],'cdns':[],'peer_asns':[],'hijack_or_misconfig':[]} # count of each type of duplicate 
+    duplicate_type_count= {'same_org':[],'same_cntry': [],'cdns':[],'peer_asns':[],'hijack_or_misconfig':[],'traffic_eng':[] ,'not_in_caida': [] } # count of each type of duplicate 
     # compare origins
-    for key, value in record_prefix_and_origin_ASes_suspect.items():
+    for key, value in record_prefix_and_origin_ASes_suspect.items(): 
         #as list
         as_list = []
         #country list 
         country_list = []
         #organization name
         organization_list = []
-        if value[0][0] in asn_to_org_map:
+        if value[0][0] not in asn_to_org_map:
+            country_name = "N/A"
+            org_name  = "N/A"
+        else: 
             country_name = asn_to_org_map[value[0][0]][3] 
             #consider the first part of the orgname only 
             org_name = asn_to_org_map[value[0][0]][2]
 
-            if org_name != '':
-                org_name = re.split('\s|-|,',asn_to_org_map[value[0][0]][2])[0]
+        # if org_name != '' and org_name != "N/A":
+        #     org_name = re.split('\s|-|,',asn_to_org_map[value[0][0]][2])[0]
 
-            as_list.append(value[0][0])
+
+        as_list.append(value[0][0])
+        country_list.append(country_name)
+        organization_list.append(org_name)
+
+        value[0]= value[0] + [country_name, org_name]
+        # compare country and org names    
+        counter = 1
+        for origin_as in value[1:]:
+            if origin_as[0] in asn_to_org_map:
+                country_name = asn_to_org_map[origin_as[0]][3]
+                org_name = asn_to_org_map[origin_as[0]][2]
+                #org_name = re.split('\s|-|,',asn_to_org_map[origin_as[0]][2])[0]
+             
+            else: 
+                country_name = "N/A"
+                org_name = "N/A"
+            as_list.append(origin_as[0])
             country_list.append(country_name)
             organization_list.append(org_name)
+            value[counter]= value[counter] + [country_name, org_name]
+            counter +=1
+            
+        #print ("Prefix %s is announced by ASes %s in %s"%(key, as_list,zip(country_list,organization_list)))
+        #check if organization names are the same
+        cdns = check_if_cdn(organization_list)
+        is_same_organization = check_same_org(organization_list)
+        is_same_country = check_same_country(country_list)
+        peer_nonpeer = check_if_peers(as_list)
+        #check if cdn 
+        if len(cdns) > 0: 
+            #print ("%s are cdns" %cdns) 
+            duplicate_type_count['cdns'].append({key:value})
 
-            value[0]= value[0] + [country_name, org_name]
-            # compare country and org names    
-            counter = 1
-            for origin_as in value[1:]:
-                if origin_as[0] in asn_to_org_map:
-                    as_list.append(origin_as[0])
-                    #check if the countries are the same 
-                    country_name = asn_to_org_map[origin_as[0]][3]
-                    org_name = re.split('\s|-|,',asn_to_org_map[origin_as[0]][2])[0]
-                    country_list.append(country_name)
-                    organization_list.append(org_name)
-                    value[counter]= value[counter] + [country_name, org_name]
-                counter +=1
-                    #if asn_to_org_map[origin_as[0]][3] == country_name:
-                
-            #print ("Prefix %s is announced by ASes %s in %s"%(key, as_list,zip(country_list,organization_list)))
-            #check if organization names are the same
-            cdns = check_if_cdn(organization_list)
-            is_same_organization = check_same_org(organization_list)
-            peer_nonpeer = check_if_peers(as_list)
-            if is_same_organization:
-                duplicate_type_count['same_org'].append({key:value})
-            #check if cdn 
-            elif len(cdns) > 0: 
-                print ("%s are cdns" %cdns) 
-                duplicate_type_count['cdns'].append({key:value})
-            #check peering relation 
-            elif len(peer_nonpeer[0]) > 0:
-                relevant_peers = [ org_as for org_as in value if org_as[0] in reduce(lambda x,y:x+y,peer_nonpeer[0])] 
-                relevent_nonpeers = [ org_as for org_as in value if org_as[0] not in reduce(lambda x,y:x+y,peer_nonpeer[0])]
-                duplicate_type_count['peer_asns'].append({key:relevant_peers})
-                # if non-peers then flag 
-                duplicate_type_count['hijack_or_misconfig'].append({key:relevent_nonpeers})
-            else:
-                duplicate_type_count['hijack_or_misconfig'].append({key:value})
-    pdb.set_trace()
+        #check same organization
+        elif is_same_organization:
+            duplicate_type_count['same_org'].append({key:value})
+
+        #check if same country
+        elif is_same_country:
+            duplicate_type_count['same_cntry'].append({key:value})
+
+        #check peering relation 
+        elif len(peer_nonpeer[0]) > 0:
+            relevant_peers = [ org_as for org_as in value if org_as[0] in reduce(lambda x,y:x+y,peer_nonpeer[0])] 
+            duplicate_type_count['peer_asns'].append({key:relevant_peers}) 
+        #discount traffic engineering based on duration less than an hour of announcement  
+        elif is_traffic_eng(value):
+            duplicate_type_count['traffic_eng'].append({key:value})
+        elif len(peer_nonpeer[1]) > 0:
+             # relevent_nonpeers = [ org_as for org_as in value if org_as[0] not in reduce(lambda x,y:x+y,peer_nonpeer[0])]
+            duplicate_type_count['hijack_or_misconfig'].append({key:value})
+        elif len(value) >= 2: 
+            duplicate_type_count['hijack_or_misconfig'].append({key:value})
+        else:
+            #record not found in CAIDA
+            duplicate_type_count['not_in_caida'].append({key:value})
+    #pdb.set_trace()
+    get_plot_type(duplicate_type_count)
+    get_plot_duration(duplicate_type_count['hijack_or_misconfig'])
+    #pdb.set_trace()
+
+def check_same_country(country_list):
+    cur_country = country_list[0]
+    for cntry in country_list[1:]:
+        # see a single occurence of different country 
+        if cntry != "N/A" and cntry!= cur_country: 
+            return False 
+    return True
+
+
+#check for traffic engineering 
+def is_traffic_eng(as_records):
+    
+    origin_announcement_times = collections.defaultdict(list)
+    for as_orig in as_records:
+        origin_announcement_times[as_orig[6]].extend(as_orig[4])
+    #assuming hijack doesnt last for more than an hour 
+    #both present at start and at end and the length greater than an hour TODO 60 s right now 
+    if (origin_announcement_times[origin_announcement_times.keys()[0]][0] - origin_announcement_times[origin_announcement_times.keys()[0]][-1] )> 3600:
+    	pdb.set_trace()#sanity check
+    if abs((origin_announcement_times[origin_announcement_times.keys()[0]][-1] - origin_announcement_times[origin_announcement_times.keys()[-1]][-1])) > 180:
+        return False
+
+    return True 
 
 #check id same organization 
 def check_same_org(org_list):
-    cur_org = org_list[0]
+    cur_org = re.split('\s|-|,',org_list[0])[0]
+    #cur_org = org_list[0]
     for org in org_list[1:]:
-        if org != cur_org:
+        if re.split('\s|-|,',org)[0] != "N/A" and re.split('\s|-|,',org)[0]!= cur_org:
             return False 
     return True
 
@@ -165,8 +228,7 @@ def check_if_peers(as_list):
     peer_nonpeer = [[],[]]
     compare_list = list(itertools.combinations(as_list, 2))
     for pair in compare_list:
-        #pdb.set_trace()
-        if pair[0] in peering_relations and pair[1] in peering_relations: 
+        if pair[0] in peering_relations and pair[1] in peering_relations and pair[0]!=pair[1]: 
             if pair[0] in (peering_relations[pair[1]]['peer']+ peering_relations[pair[1]]['provider']+ peering_relations[pair[1]]['customer']):
                 peer_nonpeer[0].append(pair)
             else:
@@ -176,13 +238,89 @@ def check_if_peers(as_list):
 def check_if_cdn(org_list):
     cdns =[]
     for org in org_list:
-        if org.lower() in cdn_list:
+        if org.lower() in cdn_list or 'cloud' in org.lower():
             cdns.append(org)
     return cdns
 
-def get_plot(classification_count):
-    ax.set_ylabel('Type of Conflict')
+def get_plot_type(duplicate_type_count):
+    plot_name = {'same_org': "Same Organization",'same_cntry': "Same Country",'cdns':"CDN",'peer_asns':"Peer ASN",'hijack_or_misconfig':"Hijack or Misconfig", 'traffic_eng' : "Traffic Engineering"}
+    #'not_in_caida': "Not in CAIDA"
+    y_pos_short_name = list(duplicate_type_count.keys())
+    y_pos = []
+    for shrt_name in y_pos_short_name:
+        if shrt_name != 'not_in_caida':
+            y_pos.append(plot_name[shrt_name])
+
+    performance = []
+    for conflict_type in y_pos_short_name:
+         if conflict_type != 'not_in_caida':
+            performance.append(len(duplicate_type_count[conflict_type]))
+    #pdb.set_trace()
+    fig, ax = plt.subplots()
+    rects = ax.bar(y_pos, performance, align = 'center', alpha = 0.5)
+    ax.set_xlabel('Number of Occurences', fontsize = 10)
+    ax.set_ylabel('Type of Conflict',fontsize = 10)
     ax.set_title('Charecterization of AS conflict')
+    
+    for rect in rects:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.01*height,
+                '%d' % int(height),
+                ha='center', va='bottom')
+
+    plt.tick_params(labelsize = 5.5)
+    plt.savefig('../figure/AS_Origin_Conflict_Types.png')
+    plt.close()
+
+def get_plot_duration(duration_list):
+     #get a list of duration 
+    durations = []
+    country_list = []
+    for prefix in duration_list:
+        announcement_start = 0 
+        first_origin = prefix.values()[0][0][0]
+        origin_reappeared = False
+        diff_origin_detected = False
+        for origin_as in prefix.values()[0]:
+            if origin_as[0] != first_origin and (not diff_origin_detected):
+                diff_origin_detected = True 
+                announcement_start = origin_as[4][-1]
+
+            elif origin_as[0] == first_origin and diff_origin_detected and origin_as[4][-1]!= announcement_start :
+                durations.append( origin_as[4][-1]- announcement_start)
+                origin_reappeared = True
+                break
+            if origin_as[5] != 'N/A' and origin_as[5] != '' and origin_as[5] != ' ':
+                country_list.append(origin_as[5])
+        if not origin_reappeared:
+            durations.append(float('inf'))      
+    # Use the histogram function to bin the data
+    durations_curated = np.sort([dur for dur in durations if dur != float('inf')])
+    
+    #counts, bin_edges = np.histogram(durations_curated, bins=len(durations_curated), normed=True)
+
+     # Now find the cdf
+    #cdf = np.cumsum(counts)/len()
+    cdf = 1. * np.arange(len(durations_curated)) / (len(durations_curated) - 1)
+     # And finally plot the cdf
+    plt.plot(durations_curated, cdf)
+    plt.xlabel('Duration of hijack in seconds (s)', fontsize = 10)
+    plt.ylabel('CDF',fontsize = 10)
+    plt.title('CDF of the Duration of Hijack in seconds')
+    plt.savefig('../figure/Duration_of_hijack.png')
+    plt.close()
+    plot_country(country_list)
+    pdb.set_trace()
+
+def plot_country(country_list):
+    counter =collections.Counter(country_list)
+    counter = counter.most_common(10)
+    plt.bar([country for country, count  in counter], [count for country, count  in counter])
+    plt.xlabel('Country', fontsize = 10)
+    plt.ylabel('Number of occurences',fontsize = 10)
+    plt.title('Number of hijack and/or misconfig by country')
+    plt.savefig('../figure/Occurences_by_country.png')
+    plt.close()
 
 if __name__ == "__main__":
     get_duplicate_origins()
